@@ -1,7 +1,7 @@
 Source: openresty-openssl-debug
 Section: libs
 Priority: optional
-Maintainer: OpenResty Admin <admin@openresty.com>
+Maintainer: Jeffrey Mealo <jeffreymealo@gmail.com>
 Build-Depends: debhelper (>= 9), autotools-dev, openresty-zlib-dev
 Standards-Version: 3.9.8
 Homepage: https://www.openssl.org/

@@ -1,7 +1,7 @@
 Source: libtest-nginx-perl
 Section: perl
 Priority: optional
-Maintainer: OpenResty Admin <admin@openresty.com>
+Maintainer: Jeffrey Mealo <jeffreymealo@gmail.com>
 Build-Depends: debhelper (>= 9)
 Build-Depends-Indep: perl, libencode-perl, libfile-path-perl, libfile-temp-perl,
     libhttp-message-perl, liblist-moreutils-perl, libwww-perl, libtest-base-perl,

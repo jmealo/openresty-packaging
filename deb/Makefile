@@ -9,6 +9,8 @@
 # we use Perl TT2 templates to generate */debian/changelog files.
 
 JOBS=8
+NCHAN_VER=1.1.7
+STREAM_LUA_NGINX_BRANCH=master
 ZLIB_VER=1.2.11
 PCRE_VER=8.40
 SSL_VER=1.0.2k
@@ -27,7 +29,26 @@ build: zlib-build pcre-build openssl-build \
 .PHONY: clean
 clean: zlib-clean pcre-clean openssl-clean openssl-debug-clean \
 	openresty-clean openresty-debug-clean openresty-valgrind-clean \
-	lemplate-clean test-nginx-clean
+	lemplate-clean test-nginx-clean nchan-clean
+
+.PHONY: nchan-download
+nchan-download:
+	curl -L https://github.com/slact/nchan/archive/v$(NCHAN_VER).tar.gz | tar xz -C /tmp
+	mv /tmp/nchan-$(NCHAN_VER) /tmp/nchan
+
+.PHONY: stream-lua-nginx-download
+stream-lua-nginx-download:
+	git clone https://github.com/openresty/stream-lua-nginx-module.git \
+    --branch $(STREAM_LUA_NGINX_BRANCH) \
+    --single-branch /tmp/stream-lua-nginx-module
+
+.PHONY: nchan-clean
+nchan-clean:
+	rm -rf /tmp/nchan-$(NCHAN_VER)
+
+.PHONY: stream-lua-nginx-clean
+stream-lua-nginx-clean:
+	rm -rf /tmp/stream-lua-nginx-module-$(STREAM_LUA_NGINX_BRANCH)
 
 .PHONY: zlib-download
 zlib-download:
@@ -42,7 +63,7 @@ zlib-build: | zlib-clean zlib-download
 	cd openresty-zlib \
 		&& tpage --define distro=$(DISTRO) debian/changelog.tt2 > debian/changelog \
 		&& debuild $(OPTS) -j$(JOBS)
-	#for f in *.deb; do debsigs --sign=origin -K D5EDEB74 $$f || exit 1; done
+	#for f in *.deb; do debsigs --sign=origin -K C14771AB $$f || exit 1; done
 	if [ -f ./upload ]; then ./upload || exit 1; fi
 
 .PHONY: zlib-clean
@@ -66,7 +87,7 @@ pcre-build: | pcre-clean pcre-download
 	cd openresty-pcre \
 		&& tpage --define distro=$(DISTRO) debian/changelog.tt2 > debian/changelog \
 		&& debuild $(OPTS) -j$(JOBS)
-	#for f in openresty-pcre*.deb; do debsigs --sign=origin -K D5EDEB74 $$f || exit 1; done
+	#for f in openresty-pcre*.deb; do debsigs --sign=origin -K C14771AB $$f || exit 1; done
 	if [ -f ./upload ]; then ./upload || exit 1; fi
 
 .PHONY: pcre-clean
@@ -91,7 +112,7 @@ openssl-build: | openssl-clean openssl-download
 	cd openresty-openssl \
 		&& tpage --define distro=$(DISTRO) debian/changelog.tt2 > debian/changelog \
 		&& debuild $(OPTS) -j$(JOBS)
-	#for f in openresty-openssl*.deb; do debsigs --sign=origin -K D5EDEB74 $$f || exit 1; done
+	#for f in openresty-openssl*.deb; do debsigs --sign=origin -K C14771AB $$f || exit 1; done
 	if [ -f ./upload ]; then ./upload || exit 1; fi
 
 .PHONY: openssl-debug-download
@@ -108,7 +129,7 @@ openssl-debug-build: | openssl-debug-clean openssl-debug-download
 	cd openresty-openssl-debug \
 		&& tpage --define distro=$(DISTRO) debian/changelog.tt2 > debian/changelog \
 		&& debuild -sa $(OPTS) -j$(JOBS)
-	#for f in openresty-openssl-debug*.deb; do debsigs --sign=origin -K D5EDEB74 $$f || exit 1; done
+	#for f in openresty-openssl-debug*.deb; do debsigs --sign=origin -K C14771AB $$f || exit 1; done
 	if [ -f ./upload ]; then ./upload || exit 1; fi
 
 .PHONY: openssl-clean
@@ -134,14 +155,14 @@ openresty-download:
 	cp openresty-$(OR_VER).tar.gz openresty_$(OR_VER).orig.tar.gz
 
 .PHONY: openresty-build
-openresty-build: | openresty-clean openresty-download
+openresty-build: | openresty-clean openresty-download nchan-clean nchan-download stream-lua-nginx-clean stream-lua-nginx-download
 	sudo apt-get -y -qq install openresty-zlib-dev openresty-pcre-dev openresty-openssl-dev
 	rm -f *.deb *.debian.tar.xz *.dsc *.changes
 	tar xf openresty_$(OR_VER).orig.tar.gz --strip-components=1 -C openresty
 	cd openresty \
 		&& tpage --define distro=$(DISTRO) debian/changelog.tt2 > debian/changelog \
 		&& debuild $(OPTS) -j$(JOBS)
-	#for f in openresty*.deb; do debsigs --sign=origin -K D5EDEB74 $$f || exit 1; done
+	#for f in openresty*.deb; do debsigs --sign=origin -K C14771AB $$f || exit 1; done
 	if [ -f ./upload ]; then ./upload || exit 1; fi
 
 .PHONY: openresty-clean
@@ -166,7 +187,7 @@ openresty-debug-build: | openresty-debug-clean openresty-debug-download
 	cd openresty-debug \
 		&& tpage --define distro=$(DISTRO) debian/changelog.tt2 > debian/changelog \
 		&& debuild -sa $(OPTS) -j$(JOBS)
-	#for f in openresty-debug*.deb; do debsigs --sign=origin -K D5EDEB74 $$f || exit 1; done
+	#for f in openresty-debug*.deb; do debsigs --sign=origin -K C14771AB $$f || exit 1; done
 	if [ -f ./upload ]; then ./upload || exit 1; fi
 
 .PHONY: openresty-debug-clean
@@ -191,7 +212,7 @@ openresty-valgrind-build: | openresty-valgrind-clean openresty-valgrind-download
 	cd openresty-valgrind \
 		&& tpage --define distro=$(DISTRO) debian/changelog.tt2 > debian/changelog \
 		&& debuild -sa $(OPTS) -j$(JOBS)
-	#for f in openresty-valgrind*.deb; do debsigs --sign=origin -K D5EDEB74 $$f || exit 1; done
+	#for f in openresty-valgrind*.deb; do debsigs --sign=origin -K C14771AB $$f || exit 1; done
 	if [ -f ./upload ]; then ./upload || exit 1; fi
 
 .PHONY: openresty-valgrind-clean
@@ -223,7 +244,7 @@ lemplate-build: | lemplate-clean lemplate-download
 	cd liblemplate-perl \
 		&& tpage --define distro=$(DISTRO) debian/changelog.tt2 > debian/changelog \
 		&& debuild -sa $(OPTS) -j$(JOBS)
-	#for f in openresty-valgrind*.deb; do debsigs --sign=origin -K D5EDEB74 $$f || exit 1; done
+	#for f in openresty-valgrind*.deb; do debsigs --sign=origin -K C14771AB $$f || exit 1; done
 	if [ -f ./upload ]; then ./upload || exit 1; fi
 
 .PHONY: test-nginx-download
@@ -247,7 +268,7 @@ test-nginx-build: | test-nginx-clean test-nginx-download
 	cd libtest-nginx-perl \
 		&& tpage --define distro=$(DISTRO) debian/changelog.tt2 > debian/changelog \
 		&& debuild -sa $(OPTS) -j$(JOBS)
-	#for f in openresty-valgrind*.deb; do debsigs --sign=origin -K D5EDEB74 $$f || exit 1; done
+	#for f in openresty-valgrind*.deb; do debsigs --sign=origin -K C14771AB $$f || exit 1; done
 	if [ -f ./upload ]; then ./upload || exit 1; fi
 
 ### Makefile ends here

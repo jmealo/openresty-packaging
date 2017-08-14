@@ -1,7 +1,7 @@
 Source: liblemplate-perl
 Section: perl
 Priority: optional
-Maintainer: OpenResty Admin <admin@openresty.com>
+Maintainer: Jeffrey Mealo <jeffreymealo@gmail.com>
 Build-Depends: debhelper (>= 9)
 Build-Depends-Indep: perl, libipc-run3-perl, libfile-find-rule-perl,
     libtemplate-perl, libtext-glob-perl, libnumber-compare-perl

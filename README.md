@@ -134,8 +134,8 @@ Ubuntu/Debian
 For Ubuntu 14.04+ and Debian 7.x+:
 
 ```bash
-sudo apt-get install libtemplate-perl dh-systemd systemtap-sdt-dev perl gnupg curl make build-essential dh-make bzr-builddeb
-
+sudo apt-get install libtemplate-perl dh-systemd systemtap-sdt-dev perl gnupg curl make build-essential dh-make bzr-builddeb libreadline-dev libncurses5-dev libpcre3-dev libssl-dev git unzip
+       
 cd /path/to/openresty-packaging/deb/
 make zlib-build
 make pcre-build
