@@ -2,10 +2,10 @@ openresty-debug (1.11.2.4-1~[% distro %]1) [% distro %]; urgency=high
 
   * upgraded OpenResty to 1.11.2.4.
 
- -- Jeffrey Mealo <jeffreymealo@gmail.com>  Tue, 11 Jul 2017 11:53:26 -0700
+ -- Jeffrey Mealo <jmealo@matchbooklearning.com>  Tue, 11 Jul 2017 11:53:26 -0700
 
 openresty-debug (1.11.2.3-1~[% distro %]1) [% distro %]; urgency=low
 
   * Initial release
 
- -- Jeffrey Mealo <jeffreymealo@gmail.com>  Mon, 01 May 2017 01:52:01 +0800
+ -- Jeffrey Mealo <jmealo@matchbooklearning.com>  Mon, 01 May 2017 01:52:01 +0800

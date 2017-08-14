@@ -1,7 +1,7 @@
 Source: openresty-zlib
 Section: libs
 Priority: optional
-Maintainer: Jeffrey Mealo <jeffreymealo@gmail.com>
+Maintainer: Jeffrey Mealo <jmealo@matchbooklearning.com>
 Build-Depends: debhelper (>= 9), autotools-dev
 Standards-Version: 3.9.8
 Homepage: http://zlib.net/

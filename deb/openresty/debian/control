@@ -1,7 +1,7 @@
 Source: openresty
 Section: httpd
 Priority: optional
-Maintainer: Jeffrey Mealo <jeffreymealo@gmail.com>
+Maintainer: Jeffrey Mealo <jmealo@matchbooklearning.com>
 Build-Depends: debhelper (>= 9), autotools-dev, dh-systemd,
  systemtap-sdt-dev, openresty-zlib-dev, openresty-openssl-dev, openresty-pcre-dev,
  perl, libfile-temp-perl
